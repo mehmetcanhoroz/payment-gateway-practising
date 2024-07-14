@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/logger"
 	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/models/entities"
 )
 
@@ -15,6 +16,7 @@ func NewPaymentsRepository() *PaymentsRepository {
 }
 
 func (ps *PaymentsRepository) GetPayment(id string) (*entities.Payment, error) {
+	logger.Debug("DEBUG: getting payment with id %s in Repository level", id)
 	for _, element := range ps.payments {
 		if element.Id == id {
 			return &element, nil

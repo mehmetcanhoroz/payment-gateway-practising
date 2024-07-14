@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/logger"
 	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/models/dtos"
 	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/models/mappers"
 	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/repository"
@@ -20,6 +21,7 @@ func NewPaymentsService(storage *repository.PaymentsRepository, fastStorage *rep
 
 // GetPayment ...
 func (h *PaymentsService) GetPayment(id string) (*dtos.GetPaymentResponse, error) {
+	logger.Debug("DEBUG: getting payment with id %s in service level", id)
 	payment, err := h.storage.GetPayment(id)
 	if err != nil {
 		return nil, err

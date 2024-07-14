@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/logger"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -28,6 +29,7 @@ func (h *PaymentsHandler) GetHandler() http.HandlerFunc {
 		payment, err := h.service.GetPayment(id)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+			logger.Error("error getting payment: %v\n", err)
 			return
 		}
 
