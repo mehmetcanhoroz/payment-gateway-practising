@@ -35,3 +35,17 @@ func (h *PaymentsService) GetPayment(id string) (*dtos.GetPaymentResponse, error
 
 	return &dtoPayment, nil
 }
+
+// MakePayment ...
+func (h *PaymentsService) MakePayment(paymentRequest dtos.PostPaymentRequest) (*dtos.PostPaymentResponse, error) {
+	logger.Debug("DEBUG: payment with id %s in service level")
+	paymentEntity := mappers.MapperPostPaymentRequestToPayments(&paymentRequest)
+	payment, err := h.storage.AddPayment(paymentEntity)
+	if err != nil {
+		return nil, err
+	}
+
+	dtoPayment := mappers.MapperPaymentsToPostPaymentResponse(&payment)
+
+	return &dtoPayment, nil
+}

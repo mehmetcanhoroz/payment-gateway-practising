@@ -4,10 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/go-chi/chi/v5/middleware"
 	"net"
 	"net/http"
 
-	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
 	"golang.org/x/sync/errgroup"
 
@@ -27,7 +27,6 @@ func New() *Api {
 	a := &Api{}
 	a.paymentsRepo = repository.NewPaymentsRepository()
 	a.paymentsFastRepo = repository.NewPaymentsFastRepository()
-	
 	a.paymentsService = services.NewPaymentsService(a.paymentsRepo, a.paymentsFastRepo)
 
 	a.setupRouter()

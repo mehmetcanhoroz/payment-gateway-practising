@@ -1,6 +1,8 @@
 package mappers
 
 import (
+	"strconv"
+
 	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/models/dtos"
 	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/models/entities"
 )
@@ -11,5 +13,29 @@ func MapperPaymentsToGetPaymentResponse(payment *entities.Payment) dtos.GetPayme
 		Currency:    payment.Currency,
 		ExpiryMonth: payment.ExpiryMonth,
 		ExpiryYear:  payment.ExpiryYear,
+	}
+}
+
+func MapperPostPaymentRequestToPayments(payment *dtos.PostPaymentRequest) entities.Payment {
+	return entities.Payment{
+		Amount:      payment.Amount,
+		Currency:    payment.Currency,
+		ExpiryMonth: payment.ExpiryMonth,
+		ExpiryYear:  payment.ExpiryYear,
+		Cvv:         payment.Cvv,
+		CardNumber:  payment.CardNumber,
+	}
+}
+
+func MapperPaymentsToPostPaymentResponse(payment *entities.Payment) dtos.PostPaymentResponse {
+	stringCard := strconv.Itoa(payment.CardNumber)
+	lastFourDigit, _ := strconv.Atoi(stringCard[len(stringCard)-4:])
+	return dtos.PostPaymentResponse{
+		Amount:             payment.Amount,
+		Currency:           payment.Currency,
+		ExpiryMonth:        payment.ExpiryMonth,
+		ExpiryYear:         payment.ExpiryYear,
+		CardNumberLastFour: lastFourDigit,
+		Id:                 payment.Id,
 	}
 }

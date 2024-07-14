@@ -3,6 +3,7 @@ package repository
 import (
 	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/logger"
 	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/models/entities"
+	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/utils"
 )
 
 type PaymentsRepository struct {
@@ -25,6 +26,8 @@ func (ps *PaymentsRepository) GetPayment(id string) (*entities.Payment, error) {
 	return nil, nil
 }
 
-func (ps *PaymentsRepository) AddPayment(payment entities.Payment) {
+func (ps *PaymentsRepository) AddPayment(payment entities.Payment) (entities.Payment, error) {
+	payment.Id = utils.RandomIDGenerator()
 	ps.payments = append(ps.payments, payment)
+	return payment, nil
 }
