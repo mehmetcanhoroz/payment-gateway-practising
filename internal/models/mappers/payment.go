@@ -9,10 +9,12 @@ import (
 
 func MapperPaymentsToGetPaymentResponse(payment *entities.Payment) dtos.GetPaymentResponse {
 	return dtos.GetPaymentResponse{
-		Amount:      payment.Amount,
-		Currency:    payment.Currency,
-		ExpiryMonth: payment.ExpiryMonth,
-		ExpiryYear:  payment.ExpiryYear,
+		Id:                 payment.Id,
+		CardNumberLastFour: last4DigitsOfCard(payment.CardNumber),
+		Amount:             payment.Amount,
+		Currency:           payment.Currency,
+		ExpiryMonth:        payment.ExpiryMonth,
+		ExpiryYear:         payment.ExpiryYear,
 	}
 }
 
@@ -28,14 +30,18 @@ func MapperPostPaymentRequestToPayments(payment *dtos.PostPaymentRequest) entiti
 }
 
 func MapperPaymentsToPostPaymentResponse(payment *entities.Payment) dtos.PostPaymentResponse {
-	stringCard := strconv.Itoa(payment.CardNumber)
-	lastFourDigit, _ := strconv.Atoi(stringCard[len(stringCard)-4:])
 	return dtos.PostPaymentResponse{
 		Amount:             payment.Amount,
 		Currency:           payment.Currency,
 		ExpiryMonth:        payment.ExpiryMonth,
 		ExpiryYear:         payment.ExpiryYear,
-		CardNumberLastFour: lastFourDigit,
+		CardNumberLastFour: last4DigitsOfCard(payment.CardNumber),
 		Id:                 payment.Id,
 	}
+}
+
+func last4DigitsOfCard(cardNumber int) int {
+	stringCard := strconv.Itoa(cardNumber)
+	lastFourDigit, _ := strconv.Atoi(stringCard[len(stringCard)-4:])
+	return lastFourDigit
 }
