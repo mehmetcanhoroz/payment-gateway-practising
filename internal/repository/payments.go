@@ -3,7 +3,7 @@ package repository
 import (
 	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/logger"
 	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/models/entities"
-	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/utils"
+	"github.com/google/uuid"
 )
 
 type PaymentsRepository struct {
@@ -27,7 +27,8 @@ func (ps *PaymentsRepository) GetPayment(id string) (*entities.Payment, error) {
 }
 
 func (ps *PaymentsRepository) AddPayment(payment entities.Payment) (entities.Payment, error) {
-	payment.Id = utils.RandomIDGenerator()
+	uuidGenerator, _ := uuid.NewV7()
+	payment.Id = uuidGenerator.String()
 	ps.payments = append(ps.payments, payment)
 	return payment, nil
 }

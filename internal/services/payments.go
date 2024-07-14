@@ -38,7 +38,10 @@ func (h *PaymentsService) GetPayment(id string) (*dtos.GetPaymentResponse, error
 
 // MakePayment ...
 func (h *PaymentsService) MakePayment(paymentRequest dtos.PostPaymentRequest) (*dtos.PostPaymentResponse, error) {
-	logger.Debug("DEBUG: payment with id %s in service level")
+	err := paymentRequest.Validate()
+	if err != nil {
+		return &dtos.PostPaymentResponse{PaymentStatus: dtos.PAYMENT_REJECTED}, err
+	}
 	paymentEntity := mappers.MapperPostPaymentRequestToPayments(&paymentRequest)
 	payment, err := h.storage.AddPayment(paymentEntity)
 	if err != nil {
