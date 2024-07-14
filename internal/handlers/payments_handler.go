@@ -13,13 +13,14 @@ type PaymentsHandler struct {
 	fastStorage *repository.PaymentsFastRepository
 }
 
-func NewPaymentsHandler(storage *repository.PaymentsRepository) *PaymentsHandler {
+func NewPaymentsHandler(storage *repository.PaymentsRepository, fastStorage *repository.PaymentsFastRepository) *PaymentsHandler {
 	return &PaymentsHandler{
-		storage: storage,
+		storage:     storage,
+		fastStorage: fastStorage,
 	}
 }
 
-// GetHandler returns an http.HandlerFunc that handles HTTP GET requests.
+// GetHandler returns a http.HandlerFunc that handles HTTP GET requests.
 // It retrieves a payment record by its ID from the storage.
 // The ID is expected to be part of the URL.
 func (h *PaymentsHandler) GetHandler() http.HandlerFunc {

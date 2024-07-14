@@ -20,6 +20,7 @@ type Api struct {
 }
 
 func New() *Api {
+	// TODO: Move resources to main level not api level
 	a := &Api{}
 	a.paymentsRepo = repository.NewPaymentsRepository()
 	a.paymentsFastRepo = repository.NewPaymentsFastRepository()
