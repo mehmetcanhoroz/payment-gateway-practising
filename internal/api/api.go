@@ -7,16 +7,19 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/repository"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
 	"golang.org/x/sync/errgroup"
+
+	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/repository"
+	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/services"
 )
 
 type Api struct {
 	router           *chi.Mux
 	paymentsRepo     *repository.PaymentsRepository
 	paymentsFastRepo *repository.PaymentsFastRepository
+	paymentsService  *services.PaymentsService
 }
 
 func New() *Api {
@@ -24,6 +27,9 @@ func New() *Api {
 	a := &Api{}
 	a.paymentsRepo = repository.NewPaymentsRepository()
 	a.paymentsFastRepo = repository.NewPaymentsFastRepository()
+	
+	a.paymentsService = services.NewPaymentsService(a.paymentsRepo, a.paymentsFastRepo)
+
 	a.setupRouter()
 
 	return a

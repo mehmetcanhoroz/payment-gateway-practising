@@ -4,19 +4,18 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/repository"
 	"github.com/go-chi/chi"
+
+	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/services"
 )
 
 type PaymentsHandler struct {
-	storage     *repository.PaymentsRepository
-	fastStorage *repository.PaymentsFastRepository
+	service *services.PaymentsService
 }
 
-func NewPaymentsHandler(storage *repository.PaymentsRepository, fastStorage *repository.PaymentsFastRepository) *PaymentsHandler {
+func NewPaymentsHandler(paymentsService *services.PaymentsService) *PaymentsHandler {
 	return &PaymentsHandler{
-		storage:     storage,
-		fastStorage: fastStorage,
+		service: paymentsService,
 	}
 }
 
@@ -26,7 +25,11 @@ func NewPaymentsHandler(storage *repository.PaymentsRepository, fastStorage *rep
 func (h *PaymentsHandler) GetHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := chi.URLParam(r, "id")
-		payment := h.storage.GetPayment(id)
+		payment, err := h.service.GetPayment(id)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
 
 		if payment != nil {
 			w.Header().Set("Content-Type", "application/json")

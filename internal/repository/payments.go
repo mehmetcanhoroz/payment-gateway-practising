@@ -14,13 +14,13 @@ func NewPaymentsRepository() *PaymentsRepository {
 	}
 }
 
-func (ps *PaymentsRepository) GetPayment(id string) *entities.Payment {
+func (ps *PaymentsRepository) GetPayment(id string) (*entities.Payment, error) {
 	for _, element := range ps.payments {
 		if element.Id == id {
-			return &element
+			return &element, nil
 		}
 	}
-	return nil
+	return nil, nil
 }
 
 func (ps *PaymentsRepository) AddPayment(payment entities.Payment) {

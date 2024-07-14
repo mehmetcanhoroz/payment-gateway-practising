@@ -1,18 +1,18 @@
 package handlers
 
 import (
+	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/models/dtos"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/models"
 	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/repository"
 	"github.com/go-chi/chi"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestGetPaymentHandler(t *testing.T) {
-	payment := models.PostPaymentResponse{
+	payment := dtos.PostPaymentResponse{
 		Id:                 "test-id",
 		PaymentStatus:      "test-successful-status",
 		CardNumberLastFour: 1234,
