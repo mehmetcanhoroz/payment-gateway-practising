@@ -1,4 +1,4 @@
-package models
+package dtos
 
 type PostPaymentRequest struct {
 	CardNumberLastFour int    `json:"card_number_last_four"`

@@ -32,9 +32,9 @@ func (a *Api) SwaggerHandler() http.HandlerFunc {
 	)
 }
 
-// GetPaymentHandler returns an http.HandlerFunc that handles Payments GET requests.
-func (a *Api) GetPaymentHandler() http.HandlerFunc {
+// GetPaymentHandlers returns an http.HandlerFunc that handles Payments GET requests.
+func (a *Api) GetPaymentHandlers() handlers.PaymentsHandler {
 	h := handlers.NewPaymentsHandler(a.paymentsRepo)
 
-	return h.GetHandler()
+	return *h
 }

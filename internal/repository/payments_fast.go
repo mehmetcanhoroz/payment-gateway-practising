@@ -4,17 +4,17 @@ import (
 	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/models/entities"
 )
 
-type PaymentsRepository struct {
+type PaymentsFastRepository struct {
 	payments []entities.Payment
 }
 
-func NewPaymentsRepository() *PaymentsRepository {
-	return &PaymentsRepository{
+func NewPaymentsFastRepository() *PaymentsFastRepository {
+	return &PaymentsFastRepository{
 		payments: []entities.Payment{},
 	}
 }
 
-func (ps *PaymentsRepository) GetPayment(id string) *entities.Payment {
+func (ps *PaymentsFastRepository) GetPayment(id string) *entities.Payment {
 	for _, element := range ps.payments {
 		if element.Id == id {
 			return &element
@@ -23,6 +23,6 @@ func (ps *PaymentsRepository) GetPayment(id string) *entities.Payment {
 	return nil
 }
 
-func (ps *PaymentsRepository) AddPayment(payment entities.Payment) {
+func (ps *PaymentsFastRepository) AddPayment(payment entities.Payment) {
 	ps.payments = append(ps.payments, payment)
 }

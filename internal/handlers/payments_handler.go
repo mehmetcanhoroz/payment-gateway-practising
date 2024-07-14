@@ -9,7 +9,8 @@ import (
 )
 
 type PaymentsHandler struct {
-	storage *repository.PaymentsRepository
+	storage     *repository.PaymentsRepository
+	fastStorage *repository.PaymentsFastRepository
 }
 
 func NewPaymentsHandler(storage *repository.PaymentsRepository) *PaymentsHandler {
@@ -38,7 +39,15 @@ func (h *PaymentsHandler) GetHandler() http.HandlerFunc {
 	}
 }
 
+// PostHandler returns an http.HandlerFunc that handles HTTP POST requests.
+// It retrieves a payment object and passes it to service layer to save and proceed
 func (ph *PaymentsHandler) PostHandler() http.HandlerFunc {
-	//TODO
-	return nil
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		err := json.NewEncoder(w).Encode("post method")
+		if err != nil {
+			return
+		}
+	}
 }

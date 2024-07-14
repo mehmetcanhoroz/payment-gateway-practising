@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net"
 	"net/http"
@@ -13,13 +14,15 @@ import (
 )
 
 type Api struct {
-	router       *chi.Mux
-	paymentsRepo *repository.PaymentsRepository
+	router           *chi.Mux
+	paymentsRepo     *repository.PaymentsRepository
+	paymentsFastRepo *repository.PaymentsFastRepository
 }
 
 func New() *Api {
 	a := &Api{}
 	a.paymentsRepo = repository.NewPaymentsRepository()
+	a.paymentsFastRepo = repository.NewPaymentsFastRepository()
 	a.setupRouter()
 
 	return a
@@ -43,7 +46,7 @@ func (a *Api) Run(ctx context.Context, addr string) error {
 	g.Go(func() error {
 		fmt.Printf("starting HTTP server on %s\n", addr)
 		err := httpServer.ListenAndServe()
-		if err != nil && err != http.ErrServerClosed {
+		if err != nil && !errors.Is(err, http.ErrServerClosed) {
 			return err
 		}
 
@@ -60,5 +63,7 @@ func (a *Api) setupRouter() {
 	a.router.Get("/ping", a.PingHandler())
 	a.router.Get("/swagger/*", a.SwaggerHandler())
 
-	a.router.Get("/api/payments/{id}", a.GetPaymentHandler())
+	paymentsHandler := a.GetPaymentHandlers()
+	a.router.Get("/api/payments/{id}", paymentsHandler.GetHandler())
+	a.router.Post("/api/payments", paymentsHandler.PostHandler())
 }
