@@ -32,6 +32,7 @@ func MapperPostPaymentRequestToPayments(payment *dtos.PostPaymentRequest) entiti
 func MapperPaymentsToPostPaymentResponse(payment *entities.Payment) dtos.PostPaymentResponse {
 	return dtos.PostPaymentResponse{
 		Amount:             payment.Amount,
+		PaymentStatus:      dtos.PAYMENT_AUTHORIZED,
 		Currency:           payment.Currency,
 		ExpiryMonth:        payment.ExpiryMonth,
 		ExpiryYear:         payment.ExpiryYear,

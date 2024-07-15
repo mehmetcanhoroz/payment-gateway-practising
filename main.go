@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/config"
 	"os"
 	"os/signal"
 	"syscall"
@@ -27,6 +28,9 @@ var (
 func main() {
 	fmt.Printf("version %s, commit %s, built at %s\n", version, commit, date)
 	docs.SwaggerInfo.Version = version
+
+	// Load the configuration
+	config.LoadConfig()
 
 	err := run()
 	if err != nil {

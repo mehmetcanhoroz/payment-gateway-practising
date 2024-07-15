@@ -4,9 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/config"
+	"github.com/cko-recruitment/payment-gateway-challenge-go/internal/pkg/imposter_bank"
 	"github.com/go-chi/chi/v5/middleware"
 	"net"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"golang.org/x/sync/errgroup"
@@ -27,7 +30,17 @@ func New() *Api {
 	a := &Api{}
 	a.paymentsRepo = repository.NewPaymentsRepository()
 	a.paymentsFastRepo = repository.NewPaymentsFastRepository()
-	a.paymentsService = services.NewPaymentsService(a.paymentsRepo, a.paymentsFastRepo)
+
+	bankHTTPClient := &http.Client{
+		Timeout: time.Second * 60,
+	}
+	imposterBankConfig := imposter_bank.ConnectorConfig{
+		HTTPClient: bankHTTPClient,
+		BankURL:    config.Config.Bank.PosURL,
+	}
+	bankConnector := imposter_bank.NewImposterBankConnector(imposterBankConfig)
+
+	a.paymentsService = services.NewPaymentsService(a.paymentsRepo, a.paymentsFastRepo, bankConnector)
 
 	a.setupRouter()
 

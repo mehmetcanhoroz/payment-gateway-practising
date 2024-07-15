@@ -68,7 +68,7 @@ func (h *PaymentsHandler) PostHandler() http.HandlerFunc {
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			err = json.NewEncoder(w).Encode(
-				dtos.PrepareResponse(payment, err.Error()),
+				dtos.PrepareResponse(dtos.PostPaymentResponse{PaymentStatus: dtos.PAYMENT_DECLINED}, err.Error()),
 			)
 			return
 		}
